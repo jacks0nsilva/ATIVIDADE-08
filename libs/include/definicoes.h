@@ -70,3 +70,4 @@
  /*DEFINIÇÕES PARA CÁLCULOS*/
 
  #define LIMITE_CO2 1000 // Limite de CO2 em ppm (partes por milhão)
+ #define LIMITE_FUMACA 500 // Limite de fumaça em ppm (partes por milhão)
