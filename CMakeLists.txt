@@ -31,6 +31,7 @@ add_executable(${PROJECT_NAME}
         ATIVIDADE-08.c # Código principal em C
         libs/src/connection_mqtt.c #Código para comunicação MQTT
         libs/src/task_connection.c # Código da tarefa que mantém a conexão ativa
+        libs/src/task_co2.c # Código da tarefa que lê o sensor MQ-135 (CO2) e publica no broker MQTT
         )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})  # Adiciona o diretório raiz como include privado apenas para o target atual
@@ -43,6 +44,7 @@ target_link_libraries(${PROJECT_NAME}
     pico_lwip_mqtt
     pico_mbedtls
     pico_lwip_mbedtls
+    hardware_adc
         )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)

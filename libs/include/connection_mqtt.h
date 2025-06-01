@@ -21,6 +21,7 @@
     bool connect_done;
     int subscribe_count;
     bool stop_client;
+    SemaphoreHandle_t publish_mutex;    // Mutex para proteger a publicação
 } MQTT_CLIENT_DATA_T;
 
  // Requisição para publicar

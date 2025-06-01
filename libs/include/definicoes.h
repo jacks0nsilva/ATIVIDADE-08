@@ -61,4 +61,12 @@
 #define MQTT_TOPIC_LEN 100
 #endif
 
- 
+ /* DEFINIÇÕES DOS PERIFÉRICOS */
+
+ #define VRX_PIN 27 // Eixo X do Joystick (Sensor MQ-135)
+ #define VRY_PIN 26 // Eixo Y do Joystick (Sensor MQ-2)
+
+
+ /*DEFINIÇÕES PARA CÁLCULOS*/
+
+ #define LIMITE_CO2 1000 // Limite de CO2 em ppm (partes por milhão)
