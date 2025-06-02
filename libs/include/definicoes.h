@@ -65,7 +65,10 @@
 
  #define VRX_PIN 27 // Eixo X do Joystick (Sensor MQ-135)
  #define VRY_PIN 26 // Eixo Y do Joystick (Sensor MQ-2)
-
+ #define BUZZER_A 21 // Pino do Buzzer
+ #define LED_RED 13 // Pino do LED Vermelho
+ #define LED_GREEN 11 // Pino do LED Verde
+ #define LED_BLUE 12 // Pino do LED Azul
 
  /*DEFINIÇÕES PARA CÁLCULOS*/
 

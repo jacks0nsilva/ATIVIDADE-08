@@ -46,6 +46,8 @@ target_link_libraries(${PROJECT_NAME}
     pico_mbedtls
     pico_lwip_mbedtls
     hardware_adc
+    hardware_pwm
+    hardware_clocks
         )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)
