@@ -24,6 +24,8 @@
     SemaphoreHandle_t publish_mutex;    // Mutex para proteger a publicação
 } MQTT_CLIENT_DATA_T;
 
+extern bool controle_global_alarmes;
+
  // Requisição para publicar
 void pub_request_cb(__unused void *arg, err_t err);
  

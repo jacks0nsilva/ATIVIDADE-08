@@ -13,6 +13,7 @@ MQTT_CLIENT_DATA_T state_client; // Variável global para o estado do cliente MQ
 TaskHandle_t xTaskAlertaFumaca = NULL; // Handle da tarefa de alerta de fumaça
 TaskHandle_t xTaskCO2 = NULL; // Handle da tarefa de CO2
 
+bool controle_global_alarmes = true; // Variável global para controle de alarmes
 
 
 int main()

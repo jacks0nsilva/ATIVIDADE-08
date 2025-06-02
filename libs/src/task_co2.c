@@ -58,7 +58,7 @@ void vTaskAlertaCO2(void *params)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
         
-        while(alerta_co2_ativo) {
+        while(alerta_co2_ativo && controle_global_alarmes) {
             printf("Alerta de fumaça ativado!\n");
             pwm_set_gpio_level(BUZZER_B, 2048);
             gpio_put(LED_BLUE, 1);
@@ -76,7 +76,7 @@ void vTaskAlertaCO2(void *params)
 
 
 void ativar_alerta_co2(float ppm, MQTT_CLIENT_DATA_T *state){
-    if(ppm > LIMITE_CO2 && !alerta_co2_ativo) {
+    if(ppm > LIMITE_CO2 && !alerta_co2_ativo && controle_global_alarmes) {
         alerta_co2_ativo = true; // Ativa o alerta de fumaça
         xTaskNotifyGive(xTaskCO2); // Notifica a tarefa de alerta de fumaça para ativar o alerta
         publicar_alerta_co2(state); // Publica o alerta no tópico MQTT

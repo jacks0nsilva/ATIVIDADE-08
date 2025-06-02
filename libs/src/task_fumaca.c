@@ -57,7 +57,7 @@ void vTaskAlertaFumaca(void *params)
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
         
-        while(alerta_fumaca_ativo) {
+        while(alerta_fumaca_ativo && controle_global_alarmes) {
             printf("Alerta de fumaça ativado!\n");
             pwm_set_gpio_level(BUZZER_A, 2048);
             gpio_put(LED_RED, 1);
@@ -75,7 +75,7 @@ void vTaskAlertaFumaca(void *params)
 
 void ativar_alerta_fumaca(float ppm, MQTT_CLIENT_DATA_T *state){
     // Verifica se o valor de ppm excede o limite e se o alerta não está ativo
-    if(ppm > LIMITE_FUMACA && !alerta_fumaca_ativo) {
+    if(ppm > LIMITE_FUMACA && !alerta_fumaca_ativo && controle_global_alarmes) {
         alerta_fumaca_ativo = true; // Ativa o alerta de fumaça
         xTaskNotifyGive(xTaskAlertaFumaca); // Notifica a tarefa de alerta de fumaça para ativar o alerta
         publicar_alerta_fumaca(state); // Publica o alerta no tópico MQTT

@@ -5,6 +5,7 @@
 #include "libs/include/connection_mqtt.h"
 
 extern TaskHandle_t xTaskAlertaFumaca;
+extern bool controle_global_alarmes;
 
 void vTaskFumaca(void *params);
 void ativar_alerta_fumaca(float ppm, MQTT_CLIENT_DATA_T *state);

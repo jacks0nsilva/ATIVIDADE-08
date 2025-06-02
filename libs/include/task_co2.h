@@ -5,6 +5,7 @@
 #include "libs/include/connection_mqtt.h"
 
 extern TaskHandle_t xTaskCO2;
+extern bool controle_global_alarmes;
 
 void vTaskCO2(void *params);
 void ativar_alerta_co2(float ppm, MQTT_CLIENT_DATA_T *state);

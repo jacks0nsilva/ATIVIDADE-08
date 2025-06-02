@@ -50,7 +50,8 @@ static void sub_unsub_topics(MQTT_CLIENT_DATA_T* state, bool sub) {
     mqtt_request_cb_t cb = sub ? sub_request_cb : unsub_request_cb;
     mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/print"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
     mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/exit"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
-    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/message"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
+    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/message"), MQTT_SUBSCRIBE_QOS, cb, state, sub);    
+    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/alerta/controle"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
 }
 
 // Dados de entrada MQTT
@@ -75,6 +76,13 @@ static void mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t f
         sub_unsub_topics(state, false); // unsubscribe
     } else if(strcmp(basic_topic, "/message") == 0) {
         INFO_printf("Mensagem recebida: %s\n", state->data);
+    } else if(strcmp(basic_topic, "/alerta/controle")==0){
+        
+        if(strcmp(state->data, "On") == 0){
+            controle_global_alarmes = false;
+        }else{
+            controle_global_alarmes = true;
+        }
     }
 }
 
