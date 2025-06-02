@@ -11,6 +11,9 @@
 
 MQTT_CLIENT_DATA_T state_client; // Variável global para o estado do cliente MQTT
 TaskHandle_t xTaskAlertaFumaca = NULL; // Handle da tarefa de alerta de fumaça
+TaskHandle_t xTaskCO2 = NULL; // Handle da tarefa de CO2
+
+
 
 int main()
 {
@@ -21,6 +24,7 @@ int main()
     xTaskCreate(vTaskCO2, "Task CO2", configMINIMAL_STACK_SIZE, &state_client, 1, NULL);
     xTaskCreate(vTaskFumaca, "Task Fumaca", configMINIMAL_STACK_SIZE, &state_client, 1, NULL);
     xTaskCreate(vTaskAlertaFumaca, "Task Alerta Fumaca", configMINIMAL_STACK_SIZE, &state_client, 1, &xTaskAlertaFumaca);
+    xTaskCreate(vTaskAlertaCO2, "Task Alerta CO2", configMINIMAL_STACK_SIZE, &state_client, 1, &xTaskCO2);
     vTaskStartScheduler();
     panic_unsupported();
 }

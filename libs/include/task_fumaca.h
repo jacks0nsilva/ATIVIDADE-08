@@ -7,7 +7,7 @@
 extern TaskHandle_t xTaskAlertaFumaca;
 
 void vTaskFumaca(void *params);
-void ativar_alerta(float ppm, MQTT_CLIENT_DATA_T *state);
+void ativar_alerta_fumaca(float ppm, MQTT_CLIENT_DATA_T *state);
 void vTaskAlertaFumaca(void *params);
-static void publicar_alerta(void *params);
+static void publicar_alerta_fumaca(void *params);
 #endif

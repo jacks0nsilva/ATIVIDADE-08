@@ -31,7 +31,7 @@ void vTaskFumaca(void *params)
             xSemaphoreTake(state->publish_mutex, portMAX_DELAY);
             mqtt_publish(state->mqtt_client_inst,full_topic(state, "/sensor/fumaca"), str_ppm, strlen(str_ppm), MQTT_PUBLISH_QOS, MQTT_PUBLISH_RETAIN, pub_request_cb, state);
             xSemaphoreGive(state->publish_mutex);
-            ativar_alerta(ppm, state); // Verifica se o valor de ppm excede o limite e ativa o alerta
+            ativar_alerta_fumaca(ppm, state); // Verifica se o valor de ppm excede o limite e ativa o alerta
         } else {
             printf("aguardando conexão MQTT...\n");
         }
@@ -41,8 +41,6 @@ void vTaskFumaca(void *params)
 
 void vTaskAlertaFumaca(void *params)
 {
-
-
     gpio_set_function(BUZZER_A, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(BUZZER_A);
     pwm_config config = pwm_get_default_config();
@@ -75,19 +73,19 @@ void vTaskAlertaFumaca(void *params)
 }
 
 
-void ativar_alerta(float ppm, MQTT_CLIENT_DATA_T *state){
+void ativar_alerta_fumaca(float ppm, MQTT_CLIENT_DATA_T *state){
     // Verifica se o valor de ppm excede o limite e se o alerta não está ativo
     if(ppm > LIMITE_FUMACA && !alerta_fumaca_ativo) {
         alerta_fumaca_ativo = true; // Ativa o alerta de fumaça
         xTaskNotifyGive(xTaskAlertaFumaca); // Notifica a tarefa de alerta de fumaça para ativar o alerta
-        publicar_alerta(state); // Publica o alerta no tópico MQTT
+        publicar_alerta_fumaca(state); // Publica o alerta no tópico MQTT
     } else if (ppm <= LIMITE_FUMACA && alerta_fumaca_ativo) {
         alerta_fumaca_ativo = false; // Desativa o alerta de fumaça
-        publicar_alerta(state); // Publica o estado do alerta no tópico MQTT
+        publicar_alerta_fumaca(state); // Publica o estado do alerta no tópico MQTT
     }
 }
  
-static void publicar_alerta(void *params)
+static void publicar_alerta_fumaca(void *params)
 {
     char* str_msg = alerta_fumaca_ativo ? "On" : "Off";
     MQTT_CLIENT_DATA_T *state = (MQTT_CLIENT_DATA_T *)params;
