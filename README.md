@@ -72,10 +72,10 @@ O sistema é dividido em várias tarefas principais:
 
 ## 📥 Tópicos MQTT Assinados:
 
-| Tópico             | Descrição                                   |
-| ------------------ | ------------------------------------------- |
-| `/exit`            | Desconecta o cliente MQTT                   |
-| `/alerta/controle` | Ativa/desativa todos os alarmes remotamente |
+| Tópico             | Descrição                                                                                                            |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `/exit`            | Desconecta o cliente MQTT                                                                                            |
+| `/alerta/controle` | Ativa/desativa todos os alarmes remotamente ("Off" - Desativa os alarmes / "On" - Alarmes tem comportamento padrão ) |
 
 ### 💡 Como usar `/alerta/controle`:
 

@@ -76,9 +76,9 @@ static void mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t f
     } else if(strcmp(basic_topic, "/alerta/controle")==0){
         // Verifica a mensagem recebida e ajusta o controle global de alarmes
         if(strcmp(state->data, "On") == 0){
-            controle_global_alarmes = false;
-        }else{
             controle_global_alarmes = true;
+        }else{
+            controle_global_alarmes = false;
         }
     }
 }
