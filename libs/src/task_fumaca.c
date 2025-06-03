@@ -5,6 +5,7 @@
 #include "semphr.h"
 #include "hardware/pwm.h"
 #include "hardware/clocks.h"
+#include "queue_sensores.h"
 
 bool alerta_fumaca_ativo = false;
 
@@ -31,6 +32,8 @@ void vTaskFumaca(void *params)
             xSemaphoreTake(state->publish_mutex, portMAX_DELAY);
             mqtt_publish(state->mqtt_client_inst,full_topic(state, "/sensor/fumaca"), str_ppm, strlen(str_ppm), MQTT_PUBLISH_QOS, MQTT_PUBLISH_RETAIN, pub_request_cb, state);
             xSemaphoreGive(state->publish_mutex);
+            //ppm_fumaca = ppm; // Atualiza a variável global com o valor de ppm de fumaça
+            xQueueSend(xQueueFumaca, &ppm, portMAX_DELAY); // Envia o valor de ppm para a fila de alertas de fumaça
             ativar_alerta_fumaca(ppm, state); // Verifica se o valor de ppm excede o limite e ativa o alerta
         } else {
             printf("aguardando conexão MQTT...\n");
