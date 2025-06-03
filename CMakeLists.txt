@@ -32,7 +32,7 @@ add_executable(${PROJECT_NAME}
         libs/src/connection_mqtt.c #Código para comunicação MQTT
         libs/src/task_connection.c # Código da tarefa que mantém a conexão ativa
         libs/src/task_co2.c # Código da tarefa que lê o sensor MQ-135 (CO2) e publica no broker MQTT
-        libs/src/task_fumaca.c # Código da tarefa que lê o sensor MQ-2 (fumaca) e publica no broker MQTT
+        libs/src/task_inflamaveis.c # Código da tarefa que lê o sensor MQ-2 (gases inflamáveis) e publica no broker MQTT
         libs/src/task_display.c # Código da tarefa que exibe os dados no display LCD
         libs/src/ssd1306.c #Biblioteca para controle do display OLED SSD1306
         )

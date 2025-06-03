@@ -8,14 +8,14 @@
 #include "libs/include/ssd1306.h"
 #include <string.h>
 
-float co2 = 0.0, fumaca = 0.0;
+float co2 = 0.0, inflamaveis = 0.0;
 
 void vTaskDisplay(void *params)
 {
     ssd1306_t ssd;
     MQTT_CLIENT_DATA_T *state = (MQTT_CLIENT_DATA_T *)params;
     char buffer_co2[10];
-    char buffer_fumaca[10];
+    char buffer_inflamaveis[10];
 
     // Inicialização da comunicação I2C
     i2c_init(I2C_PORT, 400 * 1000);
@@ -40,9 +40,8 @@ void vTaskDisplay(void *params)
             continue;
         }
 
-        if(xQueueReceive(xQueueFumaca, &fumaca, portMAX_DELAY) == pdTRUE && xQueueReceive(xQueueCO2, &co2, portMAX_DELAY) == pdTRUE)
+        if(xQueueReceive(xQueueInflamaveis, &inflamaveis, portMAX_DELAY) == pdTRUE && xQueueReceive(xQueueCO2, &co2, portMAX_DELAY) == pdTRUE)
         {
-            //rintf("Fumaça: %.0f ppm display\n", fumaca);
             ssd1306_fill(&ssd, false);
             ssd1306_rect(&ssd,0,0, WIDTH, HEIGHT, true, false); // Desenha o contorno do display
 
@@ -50,10 +49,10 @@ void vTaskDisplay(void *params)
             ssd1306_hline(&ssd, 1,126, 16, true); // Linha horizontal abaixo do título;
 
 
-            ssd1306_draw_string(&ssd, "Fumaca:", 4, 24);
-            sprintf(buffer_fumaca, "%.0f %s", fumaca, "ppm");
-            ssd1306_draw_string(&ssd, buffer_fumaca, 64, 24);
-            ssd1306_hline(&ssd, 1,126, 40, true); // Linha horizontal abaixo do valor de fumaça
+            ssd1306_draw_string(&ssd, "Inflam:", 4, 24);
+            sprintf(buffer_inflamaveis, "%.0f %s", inflamaveis, "ppm");
+            ssd1306_draw_string(&ssd, buffer_inflamaveis, 64, 24);
+            ssd1306_hline(&ssd, 1,126, 40, true); // Linha horizontal abaixo do valor dos gases inflamáveis;
 
             ssd1306_draw_string(&ssd, "CO2:", 4, 45);
             sprintf(buffer_co2, "%.0f %s", co2, "ppm");

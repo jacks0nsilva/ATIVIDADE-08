@@ -5,6 +5,6 @@
 #include "queue.h"
 
 extern QueueHandle_t xQueueCO2;
-extern QueueHandle_t xQueueFumaca;
+extern QueueHandle_t xQueueInflamaveis;
 
 #endif
