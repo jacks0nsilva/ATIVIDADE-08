@@ -27,6 +27,7 @@ int main()
 
     state_client.publish_mutex = xSemaphoreCreateMutex();
 
+    xQueueCO2 = xQueueCreate(10, sizeof(float));
     xQueueFumaca = xQueueCreate(10, sizeof(float));
 
     xTaskCreate(vTaskConnection, "Task Connection", configMINIMAL_STACK_SIZE, &state_client, 1, NULL);

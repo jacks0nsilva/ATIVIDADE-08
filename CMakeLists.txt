@@ -34,6 +34,7 @@ add_executable(${PROJECT_NAME}
         libs/src/task_co2.c # Código da tarefa que lê o sensor MQ-135 (CO2) e publica no broker MQTT
         libs/src/task_fumaca.c # Código da tarefa que lê o sensor MQ-2 (fumaca) e publica no broker MQTT
         libs/src/task_display.c # Código da tarefa que exibe os dados no display LCD
+        libs/src/ssd1306.c #Biblioteca para controle do display OLED SSD1306
         )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR})  # Adiciona o diretório raiz como include privado apenas para o target atual
@@ -49,6 +50,7 @@ target_link_libraries(${PROJECT_NAME}
     hardware_adc
     hardware_pwm
     hardware_clocks
+    hardware_i2c
         )
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)

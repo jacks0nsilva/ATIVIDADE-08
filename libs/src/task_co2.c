@@ -5,6 +5,7 @@
 #include "semphr.h"
 #include "hardware/pwm.h"
 #include "hardware/clocks.h"
+#include "libs/include/queue_sensores.h"
 
 bool alerta_co2_ativo = false;
 
@@ -30,6 +31,7 @@ void vTaskCO2(void *params)
             xSemaphoreTake(state->publish_mutex, portMAX_DELAY);
             mqtt_publish(state->mqtt_client_inst,full_topic(state, "/sensor/co2"), str_ppm, strlen(str_ppm), MQTT_PUBLISH_QOS, MQTT_PUBLISH_RETAIN, pub_request_cb, state);
             xSemaphoreGive(state->publish_mutex);
+            xQueueSend(xQueueCO2, &ppm, portMAX_DELAY); // Envia o valor de ppm para a fila xQueueCO2
             ativar_alerta_co2(ppm, state); // Verifica se o valor de ppm excede o limite e ativa o alerta
         } else {
             printf("aguardando conexão MQTT...\n");
@@ -40,8 +42,6 @@ void vTaskCO2(void *params)
 
 void vTaskAlertaCO2(void *params)
 {
-    
-
     gpio_set_function(BUZZER_B, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(BUZZER_B);
     pwm_config config = pwm_get_default_config();

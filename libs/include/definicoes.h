@@ -61,17 +61,20 @@
 #define MQTT_TOPIC_LEN 100
 #endif
 
- /* DEFINIÇÕES DOS PERIFÉRICOS */
+/* DEFINIÇÕES DOS PERIFÉRICOS */
 
- #define VRX_PIN 27 // Eixo X do Joystick (Sensor MQ-135)
- #define VRY_PIN 26 // Eixo Y do Joystick (Sensor MQ-2)
- #define BUZZER_A 21 // Pino do Buzzer
- #define BUZZER_B 10 // Pino do Buzzer
- #define LED_RED 13 // Pino do LED Vermelho
- #define LED_GREEN 11 // Pino do LED Verde
- #define LED_BLUE 12 // Pino do LED Azul
+#define VRX_PIN 27 // Eixo X do Joystick (Sensor MQ-135)
+#define VRY_PIN 26 // Eixo Y do Joystick (Sensor MQ-2)
+#define BUZZER_A 21 // Pino do Buzzer
+#define BUZZER_B 10 // Pino do Buzzer
+#define LED_RED 13 // Pino do LED Vermelho
+#define LED_BLUE 12 // Pino do LED Azul
+#define I2C_PORT i2c1 // Porta I2C
+#define I2C_SDA 14 // Pino SDA
+#define I2C_SCL 15 // Pino SCL
+#define ADRESS 0x3c // Endereço do display
 
- /*DEFINIÇÕES PARA CÁLCULOS*/
+/*DEFINIÇÕES PARA CÁLCULOS*/
 
- #define LIMITE_CO2 1000 // Limite de CO2 em ppm (partes por milhão)
- #define LIMITE_FUMACA 500 // Limite de fumaça em ppm (partes por milhão)
+#define LIMITE_CO2 1000 // Limite de CO2 em ppm (partes por milhão)
+#define LIMITE_FUMACA 500 // Limite de fumaça em ppm (partes por milhão)
