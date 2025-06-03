@@ -19,29 +19,29 @@ void vTaskFumaca(void *params)
     {
         adc_select_input(0); // Seleciona o canal ADC correspondente ao pino VRY_PIN
         uint16_t adc_value = adc_read(); // Lê o valor analógico do sensor MQ-2
-        float ppm = (adc_value / 4000.0f) * LIMITE_FUMACA; // Converte o valor ADC para ppm (partes por milhão)
-
-        printf("Valor de fumaça: %.0f ppm\n", ppm);
+        float ppm = (adc_value / 3500.0f) * LIMITE_FUMACA; // Converte o valor ADC para ppm (partes por milhão)
 
         MQTT_CLIENT_DATA_T *state = (MQTT_CLIENT_DATA_T *)params;
+
+        // Verifica se a conexão MQTT foi estabelecida, se sim, publica o valor de fumaça
         if(state->connect_done)
         {
-            // Publica o valor de CO2 no tópico MQTT
-            char str_ppm[10];
+            char str_ppm[10]; // Buffer para armazenar o valor de ppm como string
             sprintf(str_ppm, "%.0f", ppm);
-            xSemaphoreTake(state->publish_mutex, portMAX_DELAY);
+
+            xSemaphoreTake(state->publish_mutex, portMAX_DELAY); // Pega o mutex para garantir acesso exclusivo à publicação
             mqtt_publish(state->mqtt_client_inst,full_topic(state, "/sensor/fumaca"), str_ppm, strlen(str_ppm), MQTT_PUBLISH_QOS, MQTT_PUBLISH_RETAIN, pub_request_cb, state);
             xSemaphoreGive(state->publish_mutex);
-            //ppm_fumaca = ppm; // Atualiza a variável global com o valor de ppm de fumaça
             xQueueSend(xQueueFumaca, &ppm, portMAX_DELAY); // Envia o valor de ppm para a fila de alertas de fumaça
             ativar_alerta_fumaca(ppm, state); // Verifica se o valor de ppm excede o limite e ativa o alerta
-        } else {
-            printf("aguardando conexão MQTT...\n");
         }
         vTaskDelay(pdMS_TO_TICKS(2000)); // Aguarda 2 segundos antes da próxima leitura
     }
 }
 
+
+// Tarefa de alerta de fumaça
+// Esta tarefa é responsável por ativar o buzzer e o LED quando o alerta de fumaça é acionado
 void vTaskAlertaFumaca(void *params)
 {
     gpio_set_function(BUZZER_A, GPIO_FUNC_PWM);
@@ -57,11 +57,10 @@ void vTaskAlertaFumaca(void *params)
 
     while (true)
     {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Espera por uma notificação para ativar o alerta de fumaça
 
-        
+        // Enquanto o alerta de fumaça estiver ativo e o controle global de alarmes estiver habilitado, ativa o buzzer e o LED
         while(alerta_fumaca_ativo && controle_global_alarmes) {
-            printf("Alerta de fumaça ativado!\n");
             pwm_set_gpio_level(BUZZER_A, 2048);
             gpio_put(LED_RED, 1);
 
@@ -88,6 +87,7 @@ void ativar_alerta_fumaca(float ppm, MQTT_CLIENT_DATA_T *state){
     }
 }
  
+// Publica o estado do alerta de fumaça no tópico MQTT
 static void publicar_alerta_fumaca(void *params)
 {
     char* str_msg = alerta_fumaca_ativo ? "On" : "Off";

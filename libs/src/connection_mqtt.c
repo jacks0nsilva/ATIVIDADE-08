@@ -49,9 +49,8 @@ static void unsub_request_cb(void *arg, err_t err) {
 static void sub_unsub_topics(MQTT_CLIENT_DATA_T* state, bool sub) {
     mqtt_request_cb_t cb = sub ? sub_request_cb : unsub_request_cb;
     mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/print"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
-    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/exit"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
-    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/message"), MQTT_SUBSCRIBE_QOS, cb, state, sub);    
-    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/alerta/controle"), MQTT_SUBSCRIBE_QOS, cb, state, sub);
+    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/exit"), MQTT_SUBSCRIBE_QOS, cb, state, sub);  
+    mqtt_sub_unsub(state->mqtt_client_inst, full_topic(state, "/alerta/controle"), MQTT_SUBSCRIBE_QOS, cb, state, sub); // Assinatura do tópico de controle de alarmes
 }
 
 // Dados de entrada MQTT
@@ -74,10 +73,8 @@ static void mqtt_incoming_data_cb(void *arg, const u8_t *data, u16_t len, u8_t f
     } else if (strcmp(basic_topic, "/exit") == 0) {
         state->stop_client = true; // stop the client when ALL subscriptions are stopped
         sub_unsub_topics(state, false); // unsubscribe
-    } else if(strcmp(basic_topic, "/message") == 0) {
-        INFO_printf("Mensagem recebida: %s\n", state->data);
     } else if(strcmp(basic_topic, "/alerta/controle")==0){
-        
+        // Verifica a mensagem recebida e ajusta o controle global de alarmes
         if(strcmp(state->data, "On") == 0){
             controle_global_alarmes = false;
         }else{
@@ -106,7 +103,6 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
             mqtt_publish(state->mqtt_client_inst, state->mqtt_client_info.will_topic, "1", 1, MQTT_WILL_QOS, true, pub_request_cb, state);
         }
         printf("Connected to MQTT server\n");
-        // Publish temperature every 10 sec if it's changed
 
     } else if (status == MQTT_CONNECT_DISCONNECTED) {
         if (!state->connect_done) {

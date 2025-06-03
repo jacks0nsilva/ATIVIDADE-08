@@ -35,7 +35,7 @@ int main()
     xTaskCreate(vTaskFumaca, "Task Fumaca", configMINIMAL_STACK_SIZE, &state_client, 1, NULL);
     xTaskCreate(vTaskAlertaFumaca, "Task Alerta Fumaca", configMINIMAL_STACK_SIZE, &state_client, 1, &xTaskAlertaFumaca);
     xTaskCreate(vTaskAlertaCO2, "Task Alerta CO2", configMINIMAL_STACK_SIZE, &state_client, 1, &xTaskCO2);
-    xTaskCreate(vTaskDisplay, "Task Display", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+    xTaskCreate(vTaskDisplay, "Task Display", configMINIMAL_STACK_SIZE, &state_client, 1, NULL);
     vTaskStartScheduler();
     panic_unsupported();
 }

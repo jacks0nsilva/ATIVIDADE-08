@@ -18,28 +18,29 @@ void vTaskCO2(void *params)
     {
         adc_select_input(1); // Seleciona o canal ADC correspondente ao pino VRX_PIN
         uint16_t adc_value = adc_read(); // Lê o valor analógico do sensor MQ-135
-        float ppm = (adc_value / 4000.0f) * LIMITE_CO2; // Converte o valor ADC para ppm (partes por milhão)
+        float ppm = (adc_value / 3500.0f) * LIMITE_CO2; // Converte o valor ADC para ppm (partes por milhão)
 
-        printf("Valor de CO2: %.0f ppm\n", ppm);
+        MQTT_CLIENT_DATA_T *state = (MQTT_CLIENT_DATA_T *)params; // Obtém o estado do cliente MQTT
 
-        MQTT_CLIENT_DATA_T *state = (MQTT_CLIENT_DATA_T *)params;
+        // Verifica se a conexão MQTT foi estabelecida, se sim, publica o valor de CO2
         if(state->connect_done)
         {
-            // Publica o valor de CO2 no tópico MQTT
-            char str_ppm[10];
+            char str_ppm[10]; // Buffer para armazenar o valor de ppm como string
             sprintf(str_ppm, "%.0f", ppm);
-            xSemaphoreTake(state->publish_mutex, portMAX_DELAY);
-            mqtt_publish(state->mqtt_client_inst,full_topic(state, "/sensor/co2"), str_ppm, strlen(str_ppm), MQTT_PUBLISH_QOS, MQTT_PUBLISH_RETAIN, pub_request_cb, state);
+
+            xSemaphoreTake(state->publish_mutex, portMAX_DELAY); // Pega o mutex para garantir acesso exclusivo à publicação
+            mqtt_publish(state->mqtt_client_inst,full_topic(state, "/sensor/co2"), str_ppm, strlen(str_ppm), MQTT_PUBLISH_QOS, MQTT_PUBLISH_RETAIN, pub_request_cb, state); 
             xSemaphoreGive(state->publish_mutex);
             xQueueSend(xQueueCO2, &ppm, portMAX_DELAY); // Envia o valor de ppm para a fila xQueueCO2
             ativar_alerta_co2(ppm, state); // Verifica se o valor de ppm excede o limite e ativa o alerta
-        } else {
-            printf("aguardando conexão MQTT...\n");
-        }
+        } 
         vTaskDelay(pdMS_TO_TICKS(2000)); // Aguarda 2 segundos antes da próxima leitura
     }
 }
 
+
+// Tarefa de alerta de CO2
+// Esta tarefa é responsável por ativar o buzzer e o LED quando o alerta de CO2 é acionado
 void vTaskAlertaCO2(void *params)
 {
     gpio_set_function(BUZZER_B, GPIO_FUNC_PWM);
@@ -55,11 +56,10 @@ void vTaskAlertaCO2(void *params)
 
     while (true)
     {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Aguarda notificação para ativar o alerta de CO2
 
-        
+        // Enquanto o alerta estiver ativo e o controle global de alarmes estiver habilitado, o buzzer e o LED serão ativados
         while(alerta_co2_ativo && controle_global_alarmes) {
-            printf("Alerta de fumaça ativado!\n");
             pwm_set_gpio_level(BUZZER_B, 2048);
             gpio_put(LED_BLUE, 1);
 
@@ -76,6 +76,7 @@ void vTaskAlertaCO2(void *params)
 
 
 void ativar_alerta_co2(float ppm, MQTT_CLIENT_DATA_T *state){
+    // Verifica se o valor de ppm excede o limite e se o alerta não está ativo
     if(ppm > LIMITE_CO2 && !alerta_co2_ativo && controle_global_alarmes) {
         alerta_co2_ativo = true; // Ativa o alerta de fumaça
         xTaskNotifyGive(xTaskCO2); // Notifica a tarefa de alerta de fumaça para ativar o alerta
@@ -86,6 +87,7 @@ void ativar_alerta_co2(float ppm, MQTT_CLIENT_DATA_T *state){
     }
 }
 
+//// Função para publicar o estado do alerta de CO2 no tópico MQTT
 void publicar_alerta_co2(void *params)
 {
     char* str_msg = alerta_co2_ativo ? "On" : "Off";
