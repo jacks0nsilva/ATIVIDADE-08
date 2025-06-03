@@ -143,7 +143,4 @@ set(FREERTOS_KERNEL_PATH "/caminho/para/seu/FreeRTOS")
 ## 📡 Requisitos Adicionais
 
 - Broker MQTT local (ex: Mosquitto) ou online (ex: HiveMQ).
-
-```
-
-```
+- Rede Wi-Fi configurada.
