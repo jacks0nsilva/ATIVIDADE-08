@@ -40,7 +40,7 @@ void vTaskDisplay(void *params)
             continue;
         }
 
-        if(xQueueReceive(xQueueInflamaveis, &inflamaveis, portMAX_DELAY) == pdTRUE && xQueueReceive(xQueueCO2, &co2, portMAX_DELAY) == pdTRUE)
+        if(xQueueReceive(xQueueInflamaveis, &inflamaveis, portMAX_DELAY) == pdTRUE && xQueueReceive(xQueueToxicos, &co2, portMAX_DELAY) == pdTRUE)
         {
             ssd1306_fill(&ssd, false);
             ssd1306_rect(&ssd,0,0, WIDTH, HEIGHT, true, false); // Desenha o contorno do display
@@ -54,13 +54,13 @@ void vTaskDisplay(void *params)
             ssd1306_draw_string(&ssd, buffer_inflamaveis, 64, 24);
             ssd1306_hline(&ssd, 1,126, 40, true); // Linha horizontal abaixo do valor dos gases inflamáveis;
 
-            ssd1306_draw_string(&ssd, "CO2:", 4, 45);
+            ssd1306_draw_string(&ssd, "Tox:", 4, 45);
             sprintf(buffer_co2, "%.0f %s", co2, "ppm");
             ssd1306_draw_string(&ssd, buffer_co2, 44, 45); 
 
             ssd1306_send_data(&ssd); // Envia os dados para o display
         }
-        vTaskDelay(pdMS_TO_TICKS(2000));
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
     
 }

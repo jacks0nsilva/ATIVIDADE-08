@@ -1,3 +1,17 @@
+# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
+if(WIN32)
+    set(USERHOME $ENV{USERPROFILE})
+else()
+    set(USERHOME $ENV{HOME})
+endif()
+set(sdkVersion 2.1.1)
+set(toolchainVersion 14_2_Rel1)
+set(picotoolVersion 2.1.1)
+set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+if (EXISTS ${picoVscode})
+    include(${picoVscode})
+endif()
+# ====================================================================================
 cmake_minimum_required(VERSION 3.13)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -17,7 +31,7 @@ add_executable(${PROJECT_NAME}
         ATIVIDADE-08.c # Código principal em C
         libs/src/connection_mqtt.c #Código para comunicação MQTT
         libs/src/task_connection.c # Código da tarefa que mantém a conexão ativa
-        libs/src/task_co2.c # Código da tarefa que lê o sensor MQ-135 (CO2) e publica no broker MQTT
+        libs/src/task_toxicos.c # Código da tarefa que lê o sensor MQ-135 (gases tóxicos) e publica no broker MQTT
         libs/src/task_inflamaveis.c # Código da tarefa que lê o sensor MQ-2 (gases inflamáveis) e publica no broker MQTT
         libs/src/task_display.c # Código da tarefa que exibe os dados no display LCD
         libs/src/ssd1306.c #Biblioteca para controle do display OLED SSD1306

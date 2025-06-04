@@ -75,5 +75,5 @@
 
 /*DEFINIÇÕES PARA CÁLCULOS*/
 
-#define LIMITE_CO2 1000 // Limite de CO2 em ppm (partes por milhão)
+#define LIMITE_TOXICOS 1000 // Limite de gases tóxicos em ppm (partes por milhão)
 #define LIMITE_INFLAMAVEIS 500 // Limite de gases inflamáveis em ppm (partes por milhão)
