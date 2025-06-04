@@ -6,11 +6,11 @@
 
 
 
-#include "libs/include/task_connection.h"
-#include "libs/include/task_toxicos.h"
-#include "libs/include/task_inflamaveis.h"
-#include "libs/include/task_display.h"
-#include "libs/include/queue_sensores.h"
+#include "libs/include/task_connection.h" // Tarefa de conexão MQTT
+#include "libs/include/task_toxicos.h" // Tarefa de monitoramento de gases tóxicos
+#include "libs/include/task_inflamaveis.h" // Tarefa de monitoramento de gases inflamáveis
+#include "libs/include/task_display.h" // Tarefa de exibição de dados no display
+#include "libs/include/queue_sensores.h" // Fila de dados dos sensores
 
 MQTT_CLIENT_DATA_T state_client; // Variável global para o estado do cliente MQTT
 TaskHandle_t xTaskAlertaInflamaveis = NULL; // Handle da tarefa de alerta de inflamáveis
