@@ -9,7 +9,6 @@
 void vTaskConnection(void *params)
  {
     MQTT_CLIENT_DATA_T *state = (MQTT_CLIENT_DATA_T *)params;
-     // Inicializa todos os tipos de bibliotecas stdio padrão presentes que estão ligados ao binário.
      INFO_printf("mqtt client starting\n");
  
      // Inicializa a arquitetura do cyw43
