@@ -4,7 +4,6 @@
 #include "pico/cyw43_arch.h"
 #include "pico/unique_id.h"
 
-#include "credenciais.h" // Credenciais WIFI
 
 void vTaskConnection(void *params)
  {
