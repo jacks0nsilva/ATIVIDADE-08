@@ -1,3 +1,10 @@
+//#define WIFI_SSID "SUA REDE WIFI"  // Substitua pelo nome da sua rede Wi-Fi
+//#define WIFI_PASSWORD "SUA SENHA" // Substitua pela senha da sua rede Wi-Fi
+#define MQTT_SERVER "10.0.0.2"     // Substitua pelo endereço do host - broket MQTT: Ex: 192.168.1.107
+#define MQTT_USERNAME "admin"     // Substitua pelo nome da host MQTT - Username
+#define MQTT_PASSWORD "admin"     // Substitua pelo Password da host MQTT - credencial de acesso - caso exista
+
+
 #ifndef DEBUG_printf
 #ifndef NDEBUG
 #define DEBUG_printf printf
@@ -39,14 +46,6 @@
 #ifndef MQTT_UNIQUE_TOPIC
 #define MQTT_UNIQUE_TOPIC 0
 #endif
-
-//#define WIFI_SSID "SUA REDE WIFI"                  // Substitua pelo nome da sua rede Wi-Fi
-//#define WIFI_PASSWORD "SUA SENHA"      // Substitua pela senha da sua rede Wi-Fi
-#define MQTT_SERVER "10.0.0.2"                // Substitua pelo endereço do host - broket MQTT: Ex: 192.168.1.107
-#define MQTT_USERNAME "admin"     // Substitua pelo nome da host MQTT - Username
-#define MQTT_PASSWORD "admin"     // Substitua pelo Password da host MQTT - credencial de acesso - caso exista
-
-
 
 #ifndef MQTT_SERVER
 #error Need to define MQTT_SERVER
