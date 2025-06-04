@@ -4,7 +4,7 @@
 #include "FreeRTOS.h"
 #include "queue.h"
 
-extern QueueHandle_t xQueueCO2;
+extern QueueHandle_t xQueueToxicos;
 extern QueueHandle_t xQueueInflamaveis;
 
 #endif
